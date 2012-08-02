@@ -1,0 +1,1 @@
+Lots of projects have a common.js, I need to go through them all and find the useful stuff in there that isn't in something like jquery.
