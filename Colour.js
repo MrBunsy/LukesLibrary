@@ -9,22 +9,26 @@
 
 
 
-var Colour = function(r,g,b){
+var Colour = function(r,g,b,a){
 
     this.r=r;
     this.g=g;
     this.b=b;
+    //alpha, if not given assume solid colour
+    this.a = typeof(a) == "undefined" ? 1 : a;
 
     // validate/cleanup values
     this.r = (this.r < 0 || isNaN(this.r)) ? 0 : ((this.r > 255) ? 255 : this.r);
     this.g = (this.g < 0 || isNaN(this.g)) ? 0 : ((this.g > 255) ? 255 : this.g);
     this.b = (this.b < 0 || isNaN(this.b)) ? 0 : ((this.b > 255) ? 255 : this.b);
+    this.a = (this.a < 0 || isNaN(this.a)) ? 0 : ((this.a > 1) ? 1 : this.a);
     
     this.FACTOR=0.7;
     
     // some getters
     this.toRGB = function () {
         return 'rgb(' + this.r + ', ' + this.g + ', ' + this.b + ')';
+        //return this.toRGBA(this.a);
     }
     
     this.toRGBA=function(a){
