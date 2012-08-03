@@ -195,40 +195,39 @@ LukesAnimations.SpinningStick=function(pos,angle,length,distance,spins,startAngl
 //rougly place a mini grey explosion
 
 
-LukesAnimations.SmokePuff=function(pos,angle,size,canvas,stages,animationObject)
+LukesAnimations.SmokePuff=function(pos,angle,size,stages)
 {
     this.pos=pos;
     this.angle=angle;
     this.size=size;
-    ctx=canvas;
     this.stages=stages;
     this.stage=0;
-    this.animationObject=animationObject;
 	
-    this.plonkMiniExplosion=function(pos,wibble)
+    this.plonkMiniExplosion=function(pos,wibble,controller)
     {
         wibble*=Math.random()*0.5;
         pos.x+=Math.cos(Math.random()*Math.PI*2)*wibble;
         pos.y+=Math.sin(Math.random()*Math.PI*2)*wibble;//wibble/2-Math.random()*wibble;
 		
         var lastFor=4*this.stages/2
-        this.animationObject.MakeExplosionParticle(pos, 0, this.size/2, [200, 128 + Math.random() * 128, 128, 1], [255,255,255,0], lastFor);
+        //this.animationObject.MakeExplosionParticle(pos, 0, this.size/2, [200, 128 + Math.random() * 128, 128, 1], [255,255,255,0], lastFor);
+        controller.add(new LukesAnimations.ExplosionParticle(pos, 0, this.size/2,  new Colour(200, 128 + Math.random() * 128, 128, 1), new Colour(255,255,255,0), lastFor));
     }
     this.dLength=this.size/this.stages;
     this.dWibble=this.size/(this.stages*2);
 	
-    this.drawNext=function()
+    this.drawNext=function(ctx,controller)
     {
         var blobs=6;
 		
         //var dTempLength=this.dLength*stages/blobs;
 		
-        var tempPos=[this.pos.x+Math.cos(this.angle)*this.dLength*this.stage , this.pos.y+Math.sin(this.angle)*this.dLength*this.stage];
+        var tempPos=new Vector(this.pos.x+Math.cos(this.angle)*this.dLength*this.stage , this.pos.y+Math.sin(this.angle)*this.dLength*this.stage);
         var tempWibble=this.dWibble*this.stage;
 		
         for(var i=0;i<blobs;i++)
         {
-            this.plonkMiniExplosion(tempPos,tempWibble);
+            this.plonkMiniExplosion(tempPos,tempWibble,controller);
         }
 		
         this.stage++
@@ -236,15 +235,13 @@ LukesAnimations.SmokePuff=function(pos,angle,size,canvas,stages,animationObject)
     }
 }
 
-LukesAnimations.MushroomCloud=function(pos,angle,size,canvas,stages,animationObject,simple)
+LukesAnimations.MushroomCloud=function(pos,angle,size,stages,simple)
 {
     this.pos=pos;
     this.angle=angle;
     this.size=size;
-    ctx=canvas;
     this.stages=stages;
     this.stage=0;
-    this.animationObject=animationObject;
 	
     this.simple=simple		
 	
@@ -260,17 +257,20 @@ LukesAnimations.MushroomCloud=function(pos,angle,size,canvas,stages,animationObj
         this.stage=this.stages-1;
     }
 	
-    this.plonkMiniExplosion=function(pos,wibble)
+    this.plonkMiniExplosion=function(pos,wibble,controller)
     {
         wibble*=Math.random()*0.5;
         pos.x+=Math.cos(Math.random()*Math.PI*2)*wibble;
         pos.y+=Math.sin(Math.random()*Math.PI*2)*wibble;//wibble/2-Math.random()*wibble;
 		
         var lastFor=this.stages/2
-        this.animationObject.MakeExplosionParticle(pos, 0, this.size/5, [255, 128 + Math.random() * 128, 0, 1], [255,255,255,0], lastFor);
+        //this.animationObject.MakeExplosionParticle(pos, 0, this.size/5, [255, 128 + Math.random() * 128, 0, 1], [255,255,255,0], lastFor);
+        controller.add(new LukesAnimations.ExplosionParticle(pos, 0, this.size/5, new Colour(255, 128 + Math.random() * 128, 0, 1), new Colour(255,255,255,0), lastFor));
     }
+    
+    
 	
-    this.drawNext=function()
+    this.drawNext=function(ctx,controller)
     {
         //stuff happens here for every loop
         /*
@@ -301,27 +301,27 @@ LukesAnimations.MushroomCloud=function(pos,angle,size,canvas,stages,animationObj
         for(var i=0;i<numOfBlobs;i+=2)
         {
 			
-            var tempPos=[this.pos.x+Math.cos(this.angle-Math.PI/2)*dWidth*i , this.pos.y+Math.sin(this.angle-Math.PI/2)*dWidth*i];
+            var tempPos=new Vector(this.pos.x+Math.cos(this.angle-Math.PI/2)*dWidth*i , this.pos.y+Math.sin(this.angle-Math.PI/2)*dWidth*i);
 			
-            this.plonkMiniExplosion(tempPos,this.size/10);
+            this.plonkMiniExplosion(tempPos,this.size/10,controller);
         }
 		
         //right
         for(var i=0;i<numOfBlobs;i+=2)
         {
 			
-            var tempPos=[this.pos.x+Math.cos(this.angle+Math.PI/2)*dWidth*i , this.pos.y+Math.sin(this.angle+Math.PI/2)*dWidth*i];
+            var tempPos=new Vector(this.pos.x+Math.cos(this.angle+Math.PI/2)*dWidth*i , this.pos.y+Math.sin(this.angle+Math.PI/2)*dWidth*i);
 			
-            this.plonkMiniExplosion(tempPos,this.size/10);
+            this.plonkMiniExplosion(tempPos,this.size/10,controller);
         }
 		
         //up
         for(var i=0;i<numOfBlobs;i++)
         {
 			
-            var tempPos=[this.pos.x+Math.cos(this.angle)*dHeight*i , this.pos.y+Math.sin(this.angle)*dHeight*i];
+            var tempPos=new Vector(this.pos.x+Math.cos(this.angle)*dHeight*i , this.pos.y+Math.sin(this.angle)*dHeight*i);
 			
-            this.plonkMiniExplosion(tempPos,this.size/10);
+            this.plonkMiniExplosion(tempPos,this.size/10,controller);
         }		
 		
         if(this.stage+1 >= this.stages)
@@ -333,9 +333,9 @@ LukesAnimations.MushroomCloud=function(pos,angle,size,canvas,stages,animationObj
         for(var i=0;i<numOfBlobs;i++)
         {
 			
-            var tempPos=[this.pos.x+Math.cos(this.angle)*height , this.pos.y+Math.sin(this.angle)*height];
+            var tempPos=new Vector(this.pos.x+Math.cos(this.angle)*height , this.pos.y+Math.sin(this.angle)*height);
 			
-            this.plonkMiniExplosion(tempPos,this.size/2);
+            this.plonkMiniExplosion(tempPos,this.size/2,controller);
         }
 		
 
@@ -344,7 +344,7 @@ LukesAnimations.MushroomCloud=function(pos,angle,size,canvas,stages,animationObj
         {
             //first loop
             //bright flash
-            this.animationObject.MakeExplosionParticle(this.pos, 0, this.size/2, [255, 128 + Math.random() * 128, 0, 1], [255,255,255,0], this.stages/2);
+            controller.add(new LukesAnimations.ExplosionParticle(this.pos, 0, this.size/2, new Colour(255, 128 + Math.random() * 128, 0, 1), new Colour(255,255,255,0), this.stages/2));
         }
 		
 		
@@ -353,12 +353,11 @@ LukesAnimations.MushroomCloud=function(pos,angle,size,canvas,stages,animationObj
     }
 }
 
-LukesAnimations.ExplosionParticle = function(pos, startR, endR, canvas, startColour, endColour, stages)
+LukesAnimations.ExplosionParticle = function(pos, startR, endR, startColour, endColour, stages)
 {
     this.pos = pos;
     this.startR = startR;
     this.endR = endR;
-    ctx = canvas;
 	
     this.stages = stages;
     this.stage = 0;
@@ -366,16 +365,16 @@ LukesAnimations.ExplosionParticle = function(pos, startR, endR, canvas, startCol
     this.startColour = startColour;
     this.endColour = endColour;
 	
-    this.dColour = [(endColour.x - startColour.x) / stages, (endColour.y - startColour.y) / stages, (endColour[2] - startColour[2]) / stages, (endColour[3] - startColour[3]) / stages];
+    this.dColour = [(endColour.r - startColour.r) / stages, (endColour.g - startColour.g) / stages, (endColour.b - startColour.b) / stages, (endColour.a - startColour.a) / stages];
     this.dR = (endR - startR) / stages;
 	
-    this.drawNext = function()
+    this.drawNext = function(ctx,controller)
     {
         var tempR = this.startR + this.dR * this.stage;
         if (tempR > 0) {
             ctx.save();
             ctx.beginPath();
-            ctx.fillStyle = "rgba(" + Math.round(this.startColour.x + this.dColour.x * this.stage) + "," + Math.round(this.startColour.y + this.dColour.y * this.stage) + "," + Math.round(this.startColour[2] + this.dColour[2] * this.stage) + "," + (this.startColour[3] + this.dColour[3] * this.stage) + ")"
+            ctx.fillStyle = "rgba(" + Math.round(this.startColour.r + this.dColour[0] * this.stage) + "," + Math.round(this.startColour.g + this.dColour[1] * this.stage) + "," + Math.round(this.startColour.b + this.dColour[2] * this.stage) + "," + (this.startColour.a + this.dColour[3] * this.stage) + ")"
             ctx.moveTo(this.pos.x + tempR, this.pos.y);
             ctx.arc(this.pos.x, this.pos.y, tempR, 0, Math.PI * 2, true);
             ctx.fill();
@@ -388,22 +387,19 @@ LukesAnimations.ExplosionParticle = function(pos, startR, endR, canvas, startCol
     }
 }
 
-LukesAnimations.Explosion2 = function(pos, size, canvas, animationObject)
+LukesAnimations.Explosion2 = function(pos, size)
 {
     this.pos = pos;
     this.size = size;
-    ctx = canvas;
-	
-    this.animationObject = animationObject;
 	
     this.stages = 1;
     this.stage = 0;
 	
     this.blobs=30;
 	
-    this.getExplosionColour = AnimationGetExplosionColour;
+    this.getExplosionColour = LukesAnimations.GetExplosionColour;
 	
-    this.drawNext = function()
+    this.drawNext = function(ctx,controller)
     {
         //grey smoke with yellow explosions on top
         for(var i=0;i<this.blobs;i++)
@@ -417,15 +413,15 @@ LukesAnimations.Explosion2 = function(pos, size, canvas, animationObject)
 				
                 var greyNess=96 + Math.random() * 64;
 				
-                var tempColour1 = [greyNess, greyNess, greyNess, 1];
+                var tempColour1 = new Colour(greyNess, greyNess, greyNess, 1);
                 //grey
-                var tempColour2 = [greyNess/2 , greyNess/2 , greyNess/2 , 0];
+                var tempColour2 = new Colour(greyNess/2 , greyNess/2 , greyNess/2 , 0);
 				
                 //					tempColour1=[0,255,0,0]
 				
                 var tempA = Math.random() * Math.PI * 2;
-                var tempPos = [this.pos.x + Math.cos(tempA) * tempR, this.pos.y + Math.sin(tempA) * tempR];
-                this.animationObject.MakeExplosionParticle(tempPos, 0, tempSize, tempColour1, tempColour2, tempStages);
+                var tempPos = new Vector(this.pos.x + Math.cos(tempA) * tempR, this.pos.y + Math.sin(tempA) * tempR);
+                controller.add(new LukesAnimations.ExplosionParticle(tempPos, 0, tempSize, tempColour1, tempColour2, tempStages));
 			
 			
             }	
@@ -440,13 +436,13 @@ LukesAnimations.Explosion2 = function(pos, size, canvas, animationObject)
                 //var tempColour1 = [255, 128 + Math.random() * 128, 0, 1];
                 var tempColour1 = this.getExplosionColour(1);
                 //darker orange
-                var tempColour2 = [196 + Math.random() * 128, 128 + Math.random() * 64, 0, 0];
+                var tempColour2 = new Colour(196 + Math.random() * 128, 128 + Math.random() * 64, 0, 0);
 				
 				
                 var tempA = Math.random() * Math.PI * 2;
-                var tempPos = [this.pos.x + Math.cos(tempA) * tempR, this.pos.y + Math.sin(tempA) * tempR];
+                var tempPos = new Vector(this.pos.x + Math.cos(tempA) * tempR, this.pos.y + Math.sin(tempA) * tempR);
 		
-                this.animationObject.MakeExplosionParticle(tempPos, 0, tempSize, tempColour1, tempColour2, tempStages);
+                controller.add(new LukesAnimations.ExplosionParticle(tempPos, 0, tempSize, tempColour1, tempColour2, tempStages));
             }
 
         }
@@ -463,39 +459,36 @@ LukesAnimations.GetExplosionColour=function(alpha)
     {
         case 0:
             //red
-            return [128 + Math.random() * 128, 0, 0, alpha];
+            return new Colour(128 + Math.random() * 128, 0, 0, alpha);
             break;
         case 1:
             //yellow
-            return [255, 128 + Math.random() * 128, 0, alpha];
+            return new Colour(255, 128 + Math.random() * 128, 0, alpha);
             break;
         case 2:
             //orange
-            return [128 + Math.random() * 128, Math.random() * 128, 0, alpha];
+            return new Colour(128 + Math.random() * 128, Math.random() * 128, 0, alpha);
             break;
     }
 }
 
-LukesAnimations.Explosion=function(pos, size, canvas, animationObject)
+LukesAnimations.Explosion=function(pos, size)
 {
     this.pos = pos;
     this.size = size;
-    ctx = canvas;
-	
-    this.animationObject=animationObject;
 	
     this.stages = 5;
     this.stage = 0;
 	
-    this.getExplosionColour = AnimationGetExplosionColour;
+    this.getExplosionColour = LukesAnimations.GetExplosionColour;
 	
-    this.drawNext = function()
+    this.drawNext = function(ctx,controller)
     {
         for (var i = 0; i < 3; i++)
         {
             var tempR = Math.random() * this.size;
             var tempA = Math.random() * Math.PI * 2;
-            var tempPos = [this.pos.x + Math.cos(tempA) * tempR, this.pos.y + Math.sin(tempA) * tempR];
+            var tempPos = new Vector(this.pos.x + Math.cos(tempA) * tempR, this.pos.y + Math.sin(tempA) * tempR);
             var tempStages = Math.round(5 + Math.random() * 10);
 			
             var tempSize=this.size + Math.random()*this.size*2
@@ -505,7 +498,7 @@ LukesAnimations.Explosion=function(pos, size, canvas, animationObject)
             if (this.stage > this.stages / 2)
             {
                 //fade to grey
-                var tempColour2 = [Math.round(112 + Math.random() * 32), Math.round(112 + Math.random() * 32), Math.round(112 + Math.random() * 32), 0];
+                var tempColour2 = new Colour(Math.round(112 + Math.random() * 32), Math.round(112 + Math.random() * 32), Math.round(112 + Math.random() * 32), 0);
             }
             else
             {
@@ -513,7 +506,7 @@ LukesAnimations.Explosion=function(pos, size, canvas, animationObject)
                 var tempColour2 = this.getExplosionColour(0);
             }
 			
-            this.animationObject.MakeExplosionParticle(tempPos, 0, tempSize, tempColour1, tempColour2, tempStages);
+            controller.add(new LukesAnimations.ExplosionParticle(tempPos, 0, tempSize, tempColour1, tempColour2, tempStages));
         }
 		
 		
