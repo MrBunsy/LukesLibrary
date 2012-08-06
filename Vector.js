@@ -114,6 +114,21 @@ var Vector  =function(x,y,z){
         return new Vector(this.x*s,this.y*s,this.z*s);
     }
     
+    this.setX=function(x){
+        //this.x=x;
+        return new Vector(x,this.y,this.z);
+    }
+    
+    this.setY=function(y){
+        //this.y=y;
+        return new Vector(this.x,y,this.z);
+    }
+    
+    this.setZ=function(z){
+        //this.z=z;
+        return new Vector(this.x,this.y,z);
+    }
+    
     //return a vector which is normal to vector a, and in a random direction.
     //    this.randomNormal=function(){
     //        Random r = new Random();

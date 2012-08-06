@@ -61,7 +61,7 @@ var AnimationController = function(ctx,framerate,width,height,finishedCallback)
 	
     this.stop=function()
     {
-        this.ctx.clearRect(0,0,this.ctx.width,this.ctx.height);
+        this.ctx.clearRect(0,0,this.width,this.height);
         clearInterval(this.thread);
         this.running=false;
     }
@@ -72,6 +72,11 @@ var AnimationController = function(ctx,framerate,width,height,finishedCallback)
             this.thread = setInterval(function(){self.loop.call(self)}, this.framePeriod);
             this.running=true;
         }
+    }
+    
+    this.clear=function(){
+        this.ctx.clearRect(0,0,this.width,this.height);
+        this.animations=[];
     }
     
     this.isRunning=function(){

@@ -157,3 +157,40 @@ var occurs = function(array,value){
     }
     return c;
 }
+/*
+ * given a weighting array of numbers, will return int up to lenght of array-1,
+ * with probability given by value of that position in the weightings out of 
+ * the total sum of the weighting array
+ * 
+ * eg given [1,2,4]
+ * there's a 1/7 change of getting 0
+ * a 2/7 change of getting 1
+ * and a 4/7 change of getting 2
+ */
+Math.getWeightedRandom=function(weightings){
+        
+    if(weightings.length==0){
+        return 0;
+    }
+        
+    var totalP=0;
+
+    for(var i=0;i<weightings.length;i++){
+        totalP+=weightings[i];
+    }
+
+    var r = Math.random()*totalP;
+
+    var lastP=0;
+
+    for(var i=0;i<weightings.length;i++){
+        lastP+=weightings[i];
+        if(r < lastP){
+            return i;
+        }
+
+    }
+
+    return weightings.length-1;
+
+}
