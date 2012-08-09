@@ -515,3 +515,39 @@ LukesAnimations.Explosion=function(pos, size)
         return (this.stage >= this.stages);
     }
 }
+
+//something has hit a force field, this is what happens
+LukesAnimations.ForceFieldHit=function(pos,dir,colour,size){
+    //dir is the dir the thing that hit it was travelling
+    
+    this.pos=pos;
+    this.dir=dir.multiply(-1);
+    this.angle=dir.get2DAngle();
+    this.colour=colour;
+    this.size=size;
+    
+    this.drawNext = function(ctx,controller){
+        
+        
+        for(var i=0;i<4;i++){
+            var pos=this.pos;
+            var angle=this.angle + (-0.5 + Math.random())*Math.PI;
+            var length = this.size*(0.5 + Math.random()*0.5);
+            var distance=this.size*(0.5 + Math.random());
+            var spins = Math.random()*2;
+            var startAngle=Math.random()*Math.PI*2;
+            var stages = 5 + Math.round(Math.random()*10);
+            var thick = this.size*(0.1 + Math.random()*0.1);
+            var startColour = [this.colour.r,this.colour.g,this.colour.b,1];
+            var endColour = [this.colour.r,this.colour.g,this.colour.b,1];
+            var clockWise = Math.random() > 0.5;
+            controller.add(new LukesAnimations.SpinningStick(pos, angle, length, distance, spins, startAngle, stages, thick, startColour, endColour, clockWise));
+        }
+        
+        
+        
+        //finish straight away
+        return true;
+    }
+    
+}
