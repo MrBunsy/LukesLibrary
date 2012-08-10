@@ -194,3 +194,30 @@ Math.getWeightedRandom=function(weightings){
     return weightings.length-1;
 
 }
+
+Math.hypot=function(x,y){
+    return Math.sqrt(x*x + y*y);
+}
+
+//caps = Vector, noncaps = scalar:
+//line = A + tN
+//point = P
+//return shortest distance from point to line
+//http://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line#Vector_formulation
+//Math.distanceLineToPointSqrd=function(a,n,p){
+//    var stepOne = n.multiply( (a.subtract(p)).dot(n) );
+//    
+//    var lineToPoint = (a.subtract(p)).subtract(stepOne);
+//    
+//    return lineToPoint.getMagnitudeSqrd();
+//}
+
+Math.distanceLineToPoint=function(a, n, p){
+    
+    var A = a;
+    var B = a.add(n);
+    var P = p;
+    //return Math.sqrt(Math.distanceLineToPointSqrd(a, n, p));
+    var normalLength = Math.hypot(B.x - A.x, B.y - A.y);
+    return Math.abs((P.x - A.x) * (B.y - A.y) - (P.y - A.y) * (B.x - A.x)) / normalLength;
+}
