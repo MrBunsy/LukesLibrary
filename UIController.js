@@ -1,7 +1,16 @@
 /* 
  * Copyright Luke Wallin 2012
  * 
- * TODO - look at adding the text labels with this system too?
+ * The idea is this takes the heavy lifting of form elements and makes an
+ * easy way to get and set values
+ * 
+ * I'm not sure if jquery has something similar, I was away from the internet when writing this
+ * 
+ * controller.addWhatever(name,parent,arguments,callback) will add the elements to the parent object (eg a div)
+ * the callback will be called with the value as the arugment if it changes
+ * 
+ * then controller.getValue(name) will also return the value
+ * controller.setValue(name,value) will set the value
  */
 
 
@@ -18,6 +27,7 @@ var UIController = function(){
         throw "Could not find control: "+name;
     }
     
+    //return an array of the raw HTML elements created
     this.getRawElements=function(name){
         return this.getControl(name).getRawElements();
     }
@@ -186,27 +196,55 @@ var UITickBox=function(name,bTicked,parent,label,callback){
 }
 
 //bInt = true if int, false if float
-var UISlider=function(name,bInt,min,value,max,step,parent,callback){
+var UISlider=function(name,bInt,_min,_value,_max,_step,parent,callback){
     var self=this;
     this.name=name;
     this.bInt=bInt;
+//    this.min=_min;
+//    this.max=_max;
+//    this.value=_value;
+//    this.step=_step;
     
-    this.defaultValue=value;
+    this.defaultValue=_value;
     
     //create the slider
     this.slider = document.createElement("input");
     //this.slider.type="range";
+    
+//    this.slider.max=_max;
+//    this.slider.min=_min;
+//    this.slider.value=_value;
+//    this.slider.step=_step;
+    //doing it this way means html5slider.js for firefox picks up on min,max and step
     this.slider.setAttribute("type", "range");
-    this.slider.max=max;
-    this.slider.min=min;
-    this.slider.value=value;
-    this.slider.step=step;
+    this.slider.setAttribute("max", _max);
+    this.slider.setAttribute("min", _min);
+    this.slider.setAttribute("value", _value);
+    this.slider.setAttribute("step", _step);
+    
+    if(typeof(fdSlider)!="undefined"){
+        this.sliderDiv=document.createElement("div");
+        this.sliderDiv.style.width="200px";
+        this.sliderDiv.style.display="inline-block"
+        this.sliderDiv.appendChild(this.slider);
+    }
+    
+    
     //create the box
     this.box = document.createElement("input");
     this.box.type="text";
-    this.box.value=value;
+    this.box.value=_value;
     //sync them
     UISlider.sync(this.box,this.slider);
+    
+    
+    this.getValue=function(){
+        var v = this.bInt ? parseInt(this.slider.value) : parseFloat(this.slider.value);
+        if(isNaN(v)){
+            v=this.defaultValue;
+        }
+        return v;
+    }
     
     if(typeof(callback)!="undefined"){
         var oldonchange=this.slider.onchange;
@@ -218,20 +256,34 @@ var UISlider=function(name,bInt,min,value,max,step,parent,callback){
     }
     
     //add them to the parent
-    parent.appendChild(this.slider);
+    //parent.appendChild(this.slider);
+    if(typeof(fdSlider)!="undefined"){
+        parent.appendChild(this.sliderDiv);
+        
+//        fdSlider.createSlider({
+//                // Associate the select list
+//                inp:this.slider,
+//                // Use the tween animation
+//                //animation:"tween",
+//                // Keep the form element hidden
+//                hideInput:true,
+//                // Set min, max and step
+//                max:_max,
+//                min:_min,
+//                step:_step
+//        });        
+        fdSlider.init();
+        
+    }else{
+        parent.appendChild(this.slider);
+    }
     parent.appendChild(this.box);
         
     this.getName=function(){
         return this.name;
     }
     
-    this.getValue=function(){
-        var v = this.bInt ? parseInt(this.slider.value) : parseFloat(this.slider.value);
-        if(isNaN(v)){
-            v=this.defaultValue;
-        }
-        return v;
-    }
+    
     
     this.setValue=function(v){
         this.slider.value=v;
@@ -245,6 +297,15 @@ var UISlider=function(name,bInt,min,value,max,step,parent,callback){
     this.enable=function(bEnabled){
         this.slider.disabled=!bEnabled;
         this.box.disabled=!bEnabled;
+        //can't get working, not sure how to get the id I need to give enable/disable.
+        //only IE so can't be bothered in putting in effort to find it
+//        if(typeof(fdSlider)!="undefined"){
+//            if(bEnabled){
+//                fdSlider.enable(this.slider);
+//            }else{
+//                fdSlider.disable(this.slider);
+//            }
+//        }
     }
 }
 
