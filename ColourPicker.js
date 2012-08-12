@@ -46,7 +46,7 @@ var ColourPicker=function(parent,callback,defaultColour){
     if(this.width==500 && this.height==200){
         //use stored image
         this.img = document.createElement("img");
-        this.img.src="ColourPicker.png";
+        this.img.src="/scripts/LukesLibrary/ColourPicker.png";
         this.popup.appendChild(this.img);
     }else{
         //generate afresh on canvas
