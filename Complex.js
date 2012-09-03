@@ -14,8 +14,16 @@ var Complex = function(x,y){
         return new Complex(this.x+a.x,this.y+a.y);
     }
     
+    this.subtract=function(a){
+        return new Complex(this.x-a.x,this.y-a.y);
+    }
+    
     this.multiply=function(a){
         return new Complex(this.x*a.x - this.y*a.y, this.x*a.y + this.y*a.x);
+    }
+    
+    this.multiplyScalar=function(a){
+        return new Complex(this.x*a, this.y*a);
     }
     
     this.square = function(){
