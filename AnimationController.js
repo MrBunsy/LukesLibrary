@@ -29,7 +29,13 @@ var AnimationController = function(ctx,framerate,width,height,finishedCallback)
     
     this.animations = new Array();
 	
+    //by default, run the interval loop ourselves
+    this.selfRunning=true;
     
+    this.setSelfRunning=function(selfRunning){
+        //if false, then loop() will have to be called regularily by something else
+        this.selfRunning=selfRunning;
+    }
 	
     //ovverride this to detect when animations have finished
     this.finishedCallback=finishedCallback;
@@ -61,14 +67,16 @@ var AnimationController = function(ctx,framerate,width,height,finishedCallback)
 	
     this.stop=function()
     {
-        this.ctx.clearRect(0,0,this.width,this.height);
-        clearInterval(this.thread);
-        this.running=false;
+        if(this.selfRunning){
+            this.ctx.clearRect(0,0,this.width,this.height);
+            clearInterval(this.thread);
+            this.running=false;
+        }
     }
 	
     this.start = function()
     {
-        if(!this.running){
+        if(this.selfRunning && !this.running){
             this.thread = setInterval(function(){self.loop.call(self)}, this.framePeriod);
             this.running=true;
         }

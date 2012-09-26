@@ -34,7 +34,8 @@ LukesAnimations.TextFadeUp=function(pos,finishPos,startTransparency,finishTransp
         var trans = this.startTransparency + this.dt*this.stage;
 
         trans=Math.min(1,trans);
-
+        ctx.textAlign="center";
+        ctx.textBaseline="middle";
         ctx.fillStyle=this.colour.toRGBA(trans);
         ctx.font=this.size+"px arial,sans-serif";//Arial
         ctx.fillText(this.text, x, y); 
