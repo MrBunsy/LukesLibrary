@@ -47,7 +47,7 @@ var Vector  =function(x,y,z){
     }
     
     this.getRoundedZ=function(){
-        return ath.round(this.z);
+        return Math.round(this.z);
     }
     
     this.getMagnitude=function(){
