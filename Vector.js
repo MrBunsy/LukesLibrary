@@ -13,7 +13,7 @@ var Vector  =function(x,y,z){
     
     this.x=x;
     this.y=y;
-    if(typeof(z)=="undefined"){
+    if(typeof(z)==="undefined"){
         this.z=0;
     }else{
         this.z=z;
@@ -22,33 +22,33 @@ var Vector  =function(x,y,z){
     // ------------ methods ------------
     
     this.equals=function(v){
-        return v!=null && v.x== this.x && v.y== this.y && v.z == this.z;
-    }
+        return v!==null && v.x=== this.x && v.y=== this.y && v.z === this.z;
+    };
     
     this.get=function(i){
-        if(i==0){
+        if(i===0){
             return this.x;
         }
-        if(i==1){
+        if(i===1){
             return this.y;
         }else{
             return this.z;
         }
         
-    }
+    };
     
     this.getRoundedX=function(){
         return Math.round(this.x);
-    }
+    };
     
     
     this.getRoundedY=function(){
         return Math.round(this.y);
-    }
+    };
     
     this.getRoundedZ=function(){
         return Math.round(this.z);
-    }
+    };
     
     this.getMagnitude=function(){
         
@@ -57,20 +57,20 @@ var Vector  =function(x,y,z){
         //return SquareRootHack.sqrt((float)d);
         //return SquareRoot.sqrt((x*x)+(y*y)+(z*z));
         return Math.sqrt(d);
-    }
+    };
     
     this.getMagnitudeSqrd=function(){
         return (this.x*this.x)+(this.y*this.y)+(this.z*this.z);
-    }
+    };
     
     this.get2DAngle = function(){
         return Math.atan2(this.y, this.x);
-    }
+    };
     
     this.getUnit=function(){
         //TODO check if mag equals one?  if it does, leave be.
         var mag = this.getMagnitude();
-        if(mag==0){
+        if(mag===0){
             return new Vector(0,0,0);
         }
         var invSize = 1/mag;
@@ -80,54 +80,54 @@ var Vector  =function(x,y,z){
         var newZ=this.z*invSize;
         
         return new Vector(newX,newY,newZ);
-    }
+    };
     
     this.add=function(a){
         return new Vector(this.x+a.x,this.y+a.y,this.z+a.z);
-    }
+    };
     
     this.addMultiple=function(a,coef){ 
         return new Vector(this.x+coef*a.x,this.y+coef*a.y,this.z+coef*a.z);
-    }
+    };
     
     this.subtractMultiple=function(a,coef){
         return this.add(a,-coef);
-    }
+    };
     
     this.subtract=function(a){
         return new Vector(this.x-a.x,this.y-a.y,this.z-a.z);
-    }
+    };
 
     this.dot=function(a){
         return a.x*this.x+a.y*this.y+a.z*this.z;
-    }
+    };
     
     this.cross=function(b){
         return new Vector(this.y*b.z-this.z*b.y , this.z*b.x-this.x*b.z, this.x*b.y - this.y*b.x);
-    }
+    };
     
     this.twoDNormal=function(){
         return this.cross(new Vector(0,0,1));
-    }
+    };
     
     this.multiply=function(s){
         return new Vector(this.x*s,this.y*s,this.z*s);
-    }
+    };
     
     this.setX=function(x){
         //this.x=x;
         return new Vector(x,this.y,this.z);
-    }
+    };
     
     this.setY=function(y){
         //this.y=y;
         return new Vector(this.x,y,this.z);
-    }
+    };
     
     this.setZ=function(z){
         //this.z=z;
         return new Vector(this.x,this.y,z);
-    }
+    };
     
     //return a vector which is normal to vector a, and in a random direction.
     //    this.randomNormal=function(){
@@ -169,7 +169,7 @@ var Vector  =function(x,y,z){
         M.setA(newM);
         
         return M;
-   }
+   };
     
     this.tensorProduct=function(){
         var newM = new Array(3);
@@ -186,7 +186,7 @@ var Vector  =function(x,y,z){
         M.setA(newM);
         
         return M;
-    }
+    };
      
     this.getRotationMatrix=function(axis, angle){
         var u=axis.getUnit();
@@ -198,13 +198,13 @@ var Vector  =function(x,y,z){
         R = R.addMatrix(u.tensorProduct().multiplyByDouble(1-Math.cos(angle)));
         
         return R;
-    }
+    };
     
     //rotate by angle around axis
     this.rotateByAxis=function(axis, angle){
         var R = this.getRotationMatrix(axis,angle);
         return this.rotateByMatrix(R);
-    }
+    };
     
     //rotate using a rotation matrix
     this.rotateByMatrix=function(R){
@@ -217,7 +217,7 @@ var Vector  =function(x,y,z){
         var ans = R.multiplyByMatrix(v);
         
         return new Vector(ans.get(0, 0),ans.get(1, 0),ans.get(2, 0));
-    }
+    };
     //    
     //    public Vector randomNormal(Random r){// throws Exception{
     //        double Nx,Ny,Nz;
@@ -292,14 +292,14 @@ var Vector  =function(x,y,z){
     //    }
     
     this.predictableNormal=function(){
-        if(!(this.x==1 && this.y==0 && this.z==0)){
+        if(!(this.x===1 && this.y===0 && this.z===0)){
             var n = new Vector(1,0,0);
             return this.cross(n).getUnit();
         }else{
             var n = new Vector(0,1,0);
             return this.cross(n).getUnit();
         }
-    }
+    };
     
     //    private boolean validNormalSelection(double Nx, double Ny, double Nz){
     //        if(Nx!=0 && y==0 && z==0){
@@ -322,12 +322,12 @@ var Vector  =function(x,y,z){
     
     this.copy=function(){
         return new Vector(this.x,this.y,this.z);
-    }
+    };
     
     this.toString=function(){
         
         return "("+Math.round(this.x*100.0)/100.0+","+Math.round(this.y*100.0)/100.0+","+Math.round(this.z*100.0)/100.0+")";
-    }
+    };
     
     this.serialize=function(){
         return {
@@ -335,12 +335,14 @@ var Vector  =function(x,y,z){
             'y': this.y,
             'z': this.z
         };
-    }
-}
+    };
+};
+
+/* Static methods */
 
 Vector.unSerialize=function(v){
     return new Vector(v.x,v.y,v.z);
-}
+};
 
 //order them so the furthest away from awayFrom is 0
 Vector.order=function(awayFrom){
@@ -349,5 +351,15 @@ Vector.order=function(awayFrom){
         var B = b.subtract(awayFrom).getMagnitudeSqrd();
         
         return ((A > B) ? -1 : (A < B) ? +1 : 0);
-    }
-}
+    };
+};
+
+/**
+ * Given a radius and angle (in radians) return a cartesian vector
+ * @param {type} radius
+ * @param {type} angle
+ * @returns {undefined}
+ */
+Vector.fromPolar=function(radius,angle){
+    return new Vector(Math.cos(angle)*radius,Math.sin(angle)*radius);
+};
