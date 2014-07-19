@@ -4,7 +4,12 @@
  * Written for the TrainGame, designed to take some of the repeative stuf always done to a DIV
  */
 
-
+/**
+ * Given a div, will produce canvases number of canvases in the div of the same size.  Will also provide helper methods to use these canvases
+ * @param {type} div
+ * @param {type} canvases
+ * @returns {DivController}
+ */
 var DivController = function(div,canvases){
     var self=this;
     
@@ -14,12 +19,27 @@ var DivController = function(div,canvases){
     this.height=parseInt(this.div.style.height);
     this.pos = new Vector(this.div.offsetLeft,this.div.offsetTop);
     
+    /**
+     * Abstract method to be overridden
+     * @param {type} pos
+     * @returns {undefined}
+     */
     this.mouseDownCallback=function(pos){
     }
     
+    /**
+     * Abstract method to be overridden
+     * @param {type} pos
+     * @returns {undefined}
+     */
     this.mouseMoveCallback=function(pos){
     }
     
+    /**
+     * Abstract method to be overridden
+     * @param {type} pos
+     * @returns {undefined}
+     */
     this.mouseUpCallback=function(pos){
     }
     
