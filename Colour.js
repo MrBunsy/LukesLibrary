@@ -15,7 +15,7 @@ var Colour = function(r,g,b,a){
     this.g=g;
     this.b=b;
     //alpha, if not given assume solid colour
-    this.a = typeof(a) == "undefined" ? 1 : a;
+    this.a = typeof(a) === "undefined" ? 1 : a;
 
     // validate/cleanup values
     this.r = (this.r < 0 || isNaN(this.r)) ? 0 : ((this.r > 255) ? 255 : this.r);
@@ -32,6 +32,7 @@ var Colour = function(r,g,b,a){
     }
     
     this.toRGBA=function(a){
+        a = typeof(a) === "undefined" ? this.a : a;
         return 'rgba(' + this.r + ', ' + this.g + ', ' + this.b + ','+ a +')';
     }
     
